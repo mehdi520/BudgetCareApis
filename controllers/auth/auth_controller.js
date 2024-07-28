@@ -1,5 +1,5 @@
 const AsyncHandler = require('express-async-handler');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { SuccessResponse, ErrorResponse } = require('../../common/common');
 const User = require('../../models/user/user_model');
 const generateToken = require('../../utils/jwt');
