@@ -11,6 +11,9 @@ app.use(require("./middlewares/errormiddleware"));
 
 
 app.use('/api',app_router);
+app.use('/',(req,res)=>{
+    res.send('API is running');
+});
 const PORT = process.env.PORT;
 
 app.listen(PORT,() => {
