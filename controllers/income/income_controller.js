@@ -9,7 +9,7 @@ const { SuccessResponse, ErrorResponse } = require('../../common/common');
 const AddOrUpdateIncome = Asynchandler(async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const { amount, description, date, catId, incomeId } = req.body;
+        const { amount, description, date, categoryId, incomeId } = req.body;
 
         if (!amount) {
             return ErrorResponse(req, res, null, 'Amount is required');
@@ -23,7 +23,7 @@ const AddOrUpdateIncome = Asynchandler(async (req, res, next) => {
             return ErrorResponse(req, res, null, 'Date is required');
 
         }
-        else if (!catId) {
+        else if (!categoryId) {
             return ErrorResponse(req, res, null, 'Category is required');
 
         }
@@ -34,7 +34,7 @@ const AddOrUpdateIncome = Asynchandler(async (req, res, next) => {
                 return ErrorResponse(req, res, null, 'Invalid date format');
             }
             if (!incomeId) { //insert a new incomeId
-                const isExist = await Category.findOne({ user: userId, _id: catId, isDeleted: false });
+                const isExist = await Category.findOne({ user: userId, _id: categoryId, isDeleted: false });
                 if (!isExist) {
                     return ErrorResponse(req, res, null, 'Category not found');
                 }
@@ -42,7 +42,7 @@ const AddOrUpdateIncome = Asynchandler(async (req, res, next) => {
                 {
 
 
-                    const newIncome = new IncomeModel({ amount, description, date : parsedDate, userId: userId, categoryId: catId });
+                    const newIncome = new IncomeModel({ amount, description, date : parsedDate, userId: userId, categoryId: categoryId });
                     await newIncome.save();
 
                     return SuccessResponse(req, res, newIncome, 'Income added successfully');
