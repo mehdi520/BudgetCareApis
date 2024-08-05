@@ -10,7 +10,7 @@ const { SuccessResponse, ErrorResponse } = require('../../common/common');
 const AddOrUpdateExpense = Asynchandler(async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const { amount, description, date, catId, expenseId } = req.body;
+        const { amount, description, date, categoryId, expenseId } = req.body;
 
         if (!amount) {
             return ErrorResponse(req, res, null, 'Amount is required');
@@ -24,7 +24,7 @@ const AddOrUpdateExpense = Asynchandler(async (req, res, next) => {
             return ErrorResponse(req, res, null, 'Date is required');
 
         }
-        else if (!catId) {
+        else if (!categoryId) {
             return ErrorResponse(req, res, null, 'Category is required');
 
         }
@@ -35,7 +35,7 @@ const AddOrUpdateExpense = Asynchandler(async (req, res, next) => {
                 return ErrorResponse(req, res, null, 'Invalid date format');
             }
             if (!expenseId) { //insert a new expense
-                const isExist = await Category.findOne({ user: userId, _id: catId, isDeleted: false });
+                const isExist = await Category.findOne({ user: userId, _id: categoryId, isDeleted: false });
                 if (!isExist) {
                     return ErrorResponse(req, res, null, 'Category not found');
                 }
@@ -43,7 +43,7 @@ const AddOrUpdateExpense = Asynchandler(async (req, res, next) => {
                 {
 
 
-                    const newExpense = new ExpenseModel({ amount, description, date : parsedDate, userId: userId, categoryId: catId });
+                    const newExpense = new ExpenseModel({ amount, description, date : parsedDate, userId: userId, categoryId: categoryId });
                     await newExpense.save();
 
                     return SuccessResponse(req, res, newExpense, 'Expense added successfully');
@@ -119,10 +119,10 @@ const GetExpense = Asynchandler(async (req,res,next) => {
         const totalAmount = allExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
         return SuccessResponse(req, res, {
-            expenses,
+            data:expenses,
             total: totalExpenses,
             page: pageNumber,
-            totalExpense :totalAmount,
+            totalAmount :totalAmount,
             limit: pageSize,
         }, 'Expenses retrieved successfully');
     } catch (error) {

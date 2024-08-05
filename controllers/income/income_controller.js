@@ -117,10 +117,10 @@ const GetIncomes = Asynchandler(async (req,res,next) => {
         const totalAmount = allIncomes.reduce((sum, income) => sum + income.amount, 0);
 
         return SuccessResponse(req, res, {
-            incomes,
+            data:incomes,
             total: totalIncomes,
             page: pageNumber,
-            totalIncomes :totalAmount,
+            totalAmount :totalAmount,
             limit: pageSize,
         }, 'Incomes retrieved successfully');
     } catch (error) {
